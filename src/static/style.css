@@ -9,6 +9,7 @@ html {
     width: 100%;
     height: 100%;
     font-size: 14px;
+    font-family: "microsoft yahei"
 }
 
 ul {
@@ -31,6 +32,7 @@ ul li {
 .right {
     height: 100%;
     overflow: auto;
+    position: relative;
 }
 
 .left {
@@ -48,4 +50,51 @@ ul li {
     width: 100px;
     font-weight: bold;
     border-right: 1px solid #000;
+}
+
+.frame-posi {
+    position: absolute;
+    left: -300px;
+    top: -300px;
+    width: 100px;
+    height: 100px;
+    z-index: 3;
+}
+
+.frame-wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.bdr {
+    width: 20%;
+    height: 20%;
+    border: 1px solid #000;
+    position: absolute;
+}
+
+.bdr1 {
+    left: 0;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.bdr2 {
+    right: 0;
+    border-left: 0;
+    border-bottom: 0;
+}
+
+.bdr3 {
+    bottom: 0;
+    border-top: 0;
+    border-right: 0;
+}
+
+.bdr4 {
+    bottom: 0;
+    right: 0;
+    border-left: 0;
+    border-top: 0;
 }

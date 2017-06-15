@@ -13,7 +13,15 @@
 <body>
     <div id="app" class="wrap">
         <div class="left">
-
+            <video width="100%" id="video"></video>
+            <div class="frame-posi" :style="frame">
+                <div class="frame-wrap">
+                    <div class="bdr bdr1"></div>
+                    <div class="bdr bdr2"></div>
+                    <div class="bdr bdr3"></div>
+                    <div class="bdr bdr4"></div>
+                </div>
+            </div>
         </div>
         <div class="right">
             <ul id="msgWrap">
@@ -21,6 +29,7 @@
             </ul>
         </div>
     </div>
+    <script src="./hls.js"></script>
     <script src="./vue.js"></script>
     <script src="./script.js"></script>
 </body>

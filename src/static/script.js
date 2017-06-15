@@ -16,33 +16,16 @@
 var app = new Vue({
     el: '#app',
     data: {
-        items: []
+        items: [],
+        frame: {}
     }
 })
 
 var currentTime = 0;
 
-var socket = io({})
-
-socket.on('connect', function () {
-    var loginTime = +(new Date())
-    var diff = loginTime - currentTime
-    addLog('登录服务器成功, 耗时:' + diff + 'ms')
-})
-
-socket.on('message', function (data) {
-    addLog(data)
-})
-
-socket.on('login', function (data) {
-    console.log('data')
-    addLog(data)
-})
-
 function loginServer() {
     addLog('正在登录服务器...')
     currentTime = +(new Date())
-    socket.emit('login user', 'login')
 }
 
 function addLog(str) {
@@ -69,5 +52,32 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
+var video = document.getElementById('video');
+var hls = new Hls();
+hls.loadSource('https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8');
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED, function () {
+    var video = document.querySelector('video')
+    var socket = io({})
+    video.play()
+    // 登录
+    loginServer()
+    socket.on('connect', function () {
+        var loginTime = +(new Date())
+        var diff = loginTime - currentTime
+        addLog('登录服务器成功, 耗时:' + diff + 'ms')
+        socket.emit('message', {
+            width: video.clientWidth,
+            height: video.clientHeight
+        });
+    })
 
-loginServer()
+    socket.on('message', function (data) {
+        addLog(data)
+    })
+    socket.on('frame', function (data) {
+        // data.display = 'block'
+        console.log('----frame', data)
+        app.frame = data
+    })
+})
