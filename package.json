@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "express": "^4.15.3",
+    "node-pre-gyp": "^0.6.36",
+    "opencv": "git+https://github.com/peterbraden/node-opencv.git",
     "socket.io": "^2.0.3"
   }
 }

@@ -5,7 +5,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3001;
-
+var fs = require('fs')
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
@@ -27,52 +27,64 @@ io.on('connection', function (socket) {
         videoWith = data.width
         videoHeight = data.height
     })
-    setTimeout(function () {
-        var frame = createFrame()
-        console.log('----Send Frame Info')
-        socket.broadcast.emit('frame', frame);
-    }, 5000)
+    socket.on('image', function (data) {
+        // console.log('image:' + data)
+        var d1 = +(new Date())
+        var data = data.split('data:image/jpeg;base64,')
+        data = data[1]
+        var bitmap = new Buffer(data, 'base64')
+        var fileName = './static/img/pic' + (+new Date()) + '.jpg'
+        fs.writeFileSync(path.join(fileName), bitmap)
+        var d2 = +(new Date())
+        // console.log('--耗时:' + (d2 - d1))
 
-    function createFrame() {
-        var x = 0,
-            y = 0,
-            width = 50,
-            height = 50
-        x = videoWith / 2 - width / 2
-        y = videoHeight / 2 - height / 2
-        var xDirection = 'left'
-        var yDirection = 'up'
-        setInterval(function () {
-            if (x <= 1) {
-                xDirection = 'right'
-            } else if (x >= videoWith) {
-                xDirection = 'left'
-            }
-            if (xDirection == 'right') {
-                x++
-            } else {
-                x--
-            }
+        getFace(fileName)
+    })
 
-            if (y <= 1) {
-                yDirection = 'down'
-            } else if (y >= videoHeight) {
-                yDirection = 'up'
-            }
-            if (yDirection == 'down') {
-                y++
-            } else {
-                y--
-            }
 
-            var frameObj = {
-                left: x + 'px',
-                top: y + 'px',
-                width: width + 'px',
-                height: height + 'px'
-            }
-            socket.broadcast.emit('frame', frameObj)
-        }, 30)
+    function getFace(fileName) {
+        const cv = require('opencv');
+        var d1 = +(new Date())
+        cv.readImage(fileName, function (err, im) {
+            if (err) throw err;
+            if (im.width() < 1 || im.height() < 1) throw new Error('Image has no size');
 
+            im.detectObject(cv.FACE_CASCADE, {}, function (err, faces) {
+                if (err) throw err;
+
+                // for (var i = 0; i < faces.length; i++) {
+                //     var face = faces[i];
+                //     // im.ellipse(face.x + face.width / 2, face.y + face.height / 2, face.width / 2, face.height / 2);
+                //     console.log(face)
+                // }
+                if (faces && faces.length > 0) {
+                    var face = faces[0]
+                    d2 = +(new Date())
+                    var frameObj = {
+                        info: {
+                            left: face.x + 'px',
+                            top: face.y + 'px',
+                            width: face.width + 'px',
+                            height: face.height + 'px'
+                        },
+                        isShow: true
+                    }
+                    console.log('--frameObj:', frameObj, '--time:', (d2 - d1))
+                    io.sockets.emit('frame', frameObj)
+                } else {
+                    var frameObj = {
+                        isShow: false,
+                        info: {}
+                    }
+                    io.sockets.emit('frame', frameObj)
+                    console.log(+(new Date()) + '---none---')
+                }
+
+
+                // im.save('./face-detection.png');
+
+                // console.log('Image saved to ./tmp/face-detection.png' + (d2 - d1));
+            });
+        });
     }
 })

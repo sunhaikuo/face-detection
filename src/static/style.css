@@ -70,7 +70,7 @@ ul li {
 .bdr {
     width: 20%;
     height: 20%;
-    border: 1px solid #000;
+    border: 2px solid red;
     position: absolute;
 }
 

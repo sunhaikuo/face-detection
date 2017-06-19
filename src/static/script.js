@@ -17,7 +17,8 @@ var app = new Vue({
     el: '#app',
     data: {
         items: [],
-        frame: {}
+        frame: {},
+        isShow: false
     }
 })
 
@@ -53,31 +54,47 @@ Date.prototype.Format = function (fmt) { //author: meizz
 }
 
 var video = document.getElementById('video');
-var hls = new Hls();
-hls.loadSource('https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8');
-hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED, function () {
-    var video = document.querySelector('video')
-    var socket = io({})
-    video.play()
-    // 登录
-    loginServer()
-    socket.on('connect', function () {
-        var loginTime = +(new Date())
-        var diff = loginTime - currentTime
-        addLog('登录服务器成功, 耗时:' + diff + 'ms')
-        socket.emit('message', {
-            width: video.clientWidth,
-            height: video.clientHeight
-        });
-    })
-
-    socket.on('message', function (data) {
-        addLog(data)
-    })
-    socket.on('frame', function (data) {
-        // data.display = 'block'
-        console.log('----frame', data)
-        app.frame = data
-    })
+var video = document.querySelector('video')
+var socket = io({})
+video.play()
+// 登录
+loginServer()
+socket.on('connect', function () {
+    var loginTime = +(new Date())
+    var diff = loginTime - currentTime
+    addLog('登录服务器成功, 耗时:' + diff + 'ms')
+    socket.emit('message', {
+        width: video.clientWidth,
+        height: video.clientHeight
+    });
 })
+
+socket.on('message', function (data) {
+    addLog(data)
+})
+socket.on('frame', function (data) {
+    // data.display = 'block'
+    console.log('----frame', data)
+    app.frame = data.info
+    app.isShow = data.isShow
+})
+
+getScreen()
+
+
+function getScreen() {
+    var c = document.getElementById("myCanvas")
+    var ctx = c.getContext("2d")
+    var img = document.getElementById("video")
+    ctx.drawImage(img, 0, 0, 500, 300)
+    window.requestAnimationFrame(getScreen)
+}
+
+setInterval(function () {
+    var c = document.getElementById("myCanvas")
+    // var ctx = c.getContext("2d")
+    // var imgData = ctx.getImageData(10, 10, 50, 50)
+    // console.log(imgData)
+    var jpg = c.toDataURL('image/jpeg')
+    socket.emit('image', jpg)
+}, 100)

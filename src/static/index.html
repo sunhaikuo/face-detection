@@ -13,8 +13,9 @@
 <body>
     <div id="app" class="wrap">
         <div class="left">
-            <video width="100%" id="video"></video>
-            <div class="frame-posi" :style="frame">
+            <video width="500" height="300" id="video" src="./gbqq.mp4"></video>
+            <canvas id="myCanvas" width="500" height="300" style="border:1px solid #d3d3d3;background:#ffffff;"></canvas>
+            <div class="frame-posi" v-show="isShow" :style="frame">
                 <div class="frame-wrap">
                     <div class="bdr bdr1"></div>
                     <div class="bdr bdr2"></div>
@@ -29,7 +30,6 @@
             </ul>
         </div>
     </div>
-    <script src="./hls.js"></script>
     <script src="./vue.js"></script>
     <script src="./script.js"></script>
 </body>
