@@ -1,7 +1,8 @@
 
 > 下载Node
 ```
-https://nodejs.org/dist/v6.11.0/node-v6.11.0.pkg
++ https://nodejs.org/dist/v6.11.0/node-v6.11.0.pkg
++ 双击安装
 ```
 
 > 安装brew
