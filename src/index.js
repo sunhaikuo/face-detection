@@ -5,9 +5,12 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3001;
-var fs = require('fs')
+const fs = require('fs-extra')
 server.listen(port, function () {
-    console.log('Server listening at port %d', port);
+    console.log('Server listening at port %d', port)
+    fs.removeSync(path.resolve('./static/img'))
+    fs.mkdirs(path.resolve('./static/img'))
+    console.log('清理完成!')
 });
 
 // Routing
@@ -77,7 +80,7 @@ io.on('connection', function (socket) {
                         info: {}
                     }
                     io.sockets.emit('frame', frameObj)
-                    console.log(+(new Date()) + '---none---')
+                    // console.log(+(new Date()) + '---none---')
                 }
 
 

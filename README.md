@@ -19,9 +19,10 @@
 
 > 启动服务
 ```
-+ cd 下载目录/face-detection/src
++ cd 下载目录/face-detection
 + 执行: npm i
-+ node index.js
++ 执行: cd src
++ 执行: node index.js
 ```
 
 > 浏览器打开：`http://localhost:3001/`

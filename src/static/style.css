@@ -36,12 +36,12 @@ ul li {
 }
 
 .left {
-    width: 70%;
+    width: 700px;
     background-color: lightblue;
 }
 
 .right {
-    width: 30%;
+    flex:1;
     background-color: lightcyan;
 }
 

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Websocket</title>
+    <title>人脸识别</title>
     <link rel="stylesheet" href="./style.css" />
     <script src="./socket.io.js"></script>
 </head>
@@ -14,7 +14,7 @@
     <div id="app" class="wrap">
         <div class="left">
             <video width="500" height="300" id="video" src="./gbqq.mp4"></video>
-            <canvas id="myCanvas" width="500" height="300" style="border:1px solid #d3d3d3;background:#ffffff;"></canvas>
+            <canvas id="myCanvas" width="500" height="300" style="border:1px solid #d3d3d3;background:#ffffff;display:none"></canvas>
             <div class="frame-posi" v-show="isShow" :style="frame">
                 <div class="frame-wrap">
                     <div class="bdr bdr1"></div>
